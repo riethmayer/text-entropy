@@ -20,20 +20,23 @@ const ResultSchema = z.object({
 });
 
 /**
- * Returns the Shannon entropy of `text` in bits per character.
+ * Returns the Shannon entropy of `text` in bits per character, where a
+ * character is a Unicode code point.
  *
  * @param text The input string.
- * @returns Entropy in bits per character; `0` for an empty string.
+ * @returns Entropy in bits per code point; `0` for an empty string.
  */
 function shannonEntropy(text: string): number {
-  if (text.length === 0) return 0;
   const counts = new Map<string, number>();
+  let total = 0;
   for (const char of text) {
     counts.set(char, (counts.get(char) ?? 0) + 1);
+    total += 1;
   }
+  if (total === 0) return 0;
   let entropy = 0;
   for (const count of counts.values()) {
-    const p = count / text.length;
+    const p = count / total;
     entropy -= p * Math.log2(p);
   }
   return entropy;
@@ -72,14 +75,17 @@ export const model = {
       ): Promise<{ dataHandles: { name: string }[] }> => {
         const { text } = context.globalArgs;
         const bitsPerChar = shannonEntropy(text);
-        const uniqueChars = new Set(text).size;
+        // Character counts are in Unicode code points, not UTF-16 units, so
+        // astral characters (emoji, etc.) count once.
+        const codePoints = [...text];
+        const uniqueChars = new Set(codePoints).size;
 
         const handle = await context.writeResource("result", "result", {
           text,
-          length: text.length,
+          length: codePoints.length,
           uniqueChars,
           bitsPerChar: Math.round(bitsPerChar * 1000) / 1000,
-          totalBits: Math.round(bitsPerChar * text.length * 1000) / 1000,
+          totalBits: Math.round(bitsPerChar * codePoints.length * 1000) / 1000,
         });
 
         return { dataHandles: [handle] };
