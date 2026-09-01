@@ -66,6 +66,7 @@ export const model = {
         _args: Record<string, unknown>,
         context: {
           globalArgs: z.infer<typeof GlobalArgsSchema>;
+          logger: { info(msg: string, ...args: unknown[]): void };
           writeResource: (
             spec: string,
             name: string,
@@ -74,10 +75,14 @@ export const model = {
         },
       ): Promise<{ dataHandles: { name: string }[] }> => {
         const { text } = context.globalArgs;
-        const bitsPerChar = shannonEntropy(text);
         // Character counts are in Unicode code points, not UTF-16 units, so
         // astral characters (emoji, etc.) count once.
         const codePoints = [...text];
+        context.logger.info("Measuring entropy of {length} characters", {
+          length: codePoints.length,
+        });
+
+        const bitsPerChar = shannonEntropy(text);
         const uniqueChars = new Set(codePoints).size;
 
         const handle = await context.writeResource("result", "result", {
@@ -88,6 +93,9 @@ export const model = {
           totalBits: Math.round(bitsPerChar * codePoints.length * 1000) / 1000,
         });
 
+        context.logger.info("Measured {bitsPerChar} bits per character", {
+          bitsPerChar,
+        });
         return { dataHandles: [handle] };
       },
     },

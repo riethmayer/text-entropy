@@ -17,6 +17,7 @@ async function runAnalyze(text: string): Promise<AnalyzeRun> {
   const writes: AnalyzeRun["writes"] = [];
   const result = await model.methods.analyze.execute({}, {
     globalArgs: { text },
+    logger: { info: () => {} },
     writeResource: (spec, name, data) => {
       writes.push({ spec, name, data });
       return Promise.resolve({ name });
