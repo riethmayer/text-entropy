@@ -1,0 +1,9 @@
+type: '@riethmayer/text-entropy'
+typeVersion: 2026.09.01.1
+id: 48e9e861-ad6c-4364-8e90-061aed52c22d
+name: fox-entropy
+version: 1
+tags: {}
+globalArguments:
+  text: The quick brown fox jumps over the lazy dog
+methods: {}

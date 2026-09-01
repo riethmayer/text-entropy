@@ -1,0 +1,17 @@
+manifestVersion: 1
+
+name: "@riethmayer/text-entropy"
+version: "2026.09.01.1"
+description: "Measure the Shannon entropy of a piece of text"
+repository: "https://github.com/riethmayer/text-entropy"
+
+models:
+  - text_entropy.ts
+
+additionalFiles:
+  - README.md
+  - LICENSE.md
+
+labels:
+  - text
+  - analysis

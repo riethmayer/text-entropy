@@ -1,0 +1,9 @@
+swampVersion: 20260901.170638.0
+initializedAt: "2026-09-01T19:19:23.295Z"
+repoId: 684c4575-4c5b-40aa-b019-cb5183fefd90
+tools:
+  - claude
+gitignoreManaged: true
+trustedCollectives:
+  - swamp
+  - riethmayer

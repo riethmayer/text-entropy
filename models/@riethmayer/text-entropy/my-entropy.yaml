@@ -1,0 +1,9 @@
+type: '@riethmayer/text-entropy'
+typeVersion: 2026.09.01.1
+id: 131b2b87-5a50-4b94-9599-a9e258732dad
+name: my-entropy
+version: 1
+tags: {}
+globalArguments:
+  text: correct horse battery staple
+methods: {}
